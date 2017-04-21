@@ -3,3 +3,9 @@ Packages
 xcuserdata
 *.xcodeproj
 Config/secrets
+
+# idea files
+.idea/
+
+# macOS specific
+.DS_Store
