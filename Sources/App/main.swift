@@ -16,6 +16,12 @@ guard let token = drop.config["app", "TELEGRAM_TOKEN"]?.string! else {
 // Set telegram token so it can be used
 ConfigHolder.telegramToken = token
 
+guard let botName = drop.config["app", "BOT_NAME"]?.string! else {
+    throw Abort.serverError
+}
+// Set bot name so it can be used
+ConfigHolder.botName = token
+
 let t = TelegramController()
 drop.post(token, handler: t.telegramBaseRequest)
 

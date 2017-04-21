@@ -27,7 +27,7 @@ final class TelegramController {
         case nil:
             print("Not a text")
         default:
-            print("Text")
+            drop.log.info("Can't answer that message...")
         }
     }
 }

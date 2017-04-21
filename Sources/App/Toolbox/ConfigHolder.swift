@@ -9,4 +9,6 @@
 class ConfigHolder {
 
     static var telegramToken: String!
+
+    static var botName: String!
 }
