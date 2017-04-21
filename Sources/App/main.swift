@@ -10,10 +10,13 @@ drop.get { req in
 
 drop.resource("posts", PostController())
 
-let t = TelegramController()
 guard let token = drop.config["app", "TELEGRAM_TOKEN"]?.string! else {
     throw Abort.serverError
 }
+// Set telegram token so it can be used
+ConfigHolder.telegramToken = token
+
+let t = TelegramController()
 drop.post(token, handler: t.telegramBaseRequest)
 
 drop.run()

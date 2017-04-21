@@ -8,11 +8,26 @@ import Vapor
 final class TelegramController {
 
     func telegramBaseRequest(_ req: Request) throws -> ResponseRepresentable {
-        guard let update = req.json?["update_id"]?.int else {
+        guard let json = req.json else {
             throw Abort.badRequest
         }
+
+        // Parse request
+        if let message = json["message"] {
+            parseMessage(message)
+        }
+
         return try JSON(node: [
-            "update_id": update
+            "success": true
             ])
+    }
+
+    fileprivate func parseMessage(_ message: JSON) {
+        switch message["text"] {
+        case nil:
+            print("Not a text")
+        default:
+            print("Text")
+        }
     }
 }
