@@ -20,7 +20,7 @@ class AnalyzeInlineCallbackQuery: BaseCallbackQuery {
 
     func run() throws {
         guard let message = callbackQuery["message"], let _ = message["reply_to_message"] else {
-            drop.log.warning(try callbackQuery.serialize().string())
+            drop.log.error(try callbackQuery.serialize().string())
             return
         }
 
