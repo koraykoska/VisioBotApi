@@ -45,6 +45,28 @@ class TelegramApi {
         return response
     }
 
+    class func answerCallbackQuery(callbackQueryId: String, text: String? = nil, showAlert: Bool? = nil, url: String? = nil, cacheTime: Int? = nil) throws -> Response {
+        var message = try JSON(node: [
+            "callback_query_id": callbackQueryId
+            ])
+        if let text = text {
+            message["text"] = JSON(Node(text))
+        }
+        if let showAlert = showAlert {
+            message["show_alert"] = JSON(Node(showAlert))
+        }
+        if let url = url {
+            message["url"] = JSON(Node(url))
+        }
+        if let cacheTime = cacheTime {
+            message["cache_time"] = JSON(Node(cacheTime))
+        }
+
+        let response = try drop.client.post(baseUrl("answerCallbackQuery"), headers: jsonContentTypeHeader, body: message.makeBody())
+
+        return response
+    }
+
     class func getFile(fileId: String) throws -> Response {
         let request = try JSON(node: ["file_id": fileId])
 

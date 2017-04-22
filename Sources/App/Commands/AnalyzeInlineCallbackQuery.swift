@@ -19,12 +19,14 @@ class AnalyzeInlineCallbackQuery: BaseCallbackQuery {
     }
 
     func run() throws {
-        guard let message = callbackQuery["message"], let _ = message["reply_to_message"] else {
+        guard let id = callbackQuery["id"]?.string, let message = callbackQuery["message"], let _ = message["reply_to_message"] else {
             drop.log.error(try callbackQuery.serialize().string())
             return
         }
 
         let a = AnalyzeCommand(message: message)
         try a.run()
+
+        let _ = try TelegramApi.answerCallbackQuery(callbackQueryId: id)
     }
 }
