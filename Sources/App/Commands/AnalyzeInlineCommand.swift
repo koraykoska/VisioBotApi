@@ -47,6 +47,8 @@ class AnalyzeInlineCommand: BaseCommand {
         let analyzeButton = InlineKeyboardButton(text: "Analyze!", callbackData: AnalyzeInlineCallbackQuery.callbackData)
         buttonRows.append([analyzeButton])
 
+        drop.log.error(try analyzeButton.makeJSON().serialize().string())
+
         let inlineKeyboard = InlineKeyboardMarkup(inlineKeyboardButtonRows: buttonRows)
         drop.log.debug("*** InlineKeyboardMarkup ***")
         drop.log.debug(try inlineKeyboard.makeJSON().serialize().string())
