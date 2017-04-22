@@ -28,5 +28,9 @@ class AnalyzeInlineCallbackQuery: BaseCallbackQuery {
         try a.run()
 
         let _ = try TelegramApi.answerCallbackQuery(callbackQueryId: id)
+
+        if let chatId = message["chat"]?["id"]?.int, let messageId = message["message_id"]?.int {
+            let _ = try TelegramApi.editMessageReplyMarkup(chatId: String(chatId), messageId: messageId)
+        }
     }
 }

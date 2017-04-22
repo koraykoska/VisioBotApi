@@ -67,6 +67,27 @@ class TelegramApi {
         return response
     }
 
+    class func editMessageReplyMarkup(chatId: String? = nil, messageId: Int? = nil, inlineMessageId: String? = nil, replyMarkup: ReplyMarkup? = nil) throws -> Response {
+        let emptyNode: [String: NodeRepresentable] = [:]
+        var message = try JSON(node: emptyNode)
+        if let chatId = chatId {
+            message["chat_id"] = JSON(Node(chatId))
+        }
+        if let messageId = messageId {
+            message["message_id"] = JSON(Node(messageId))
+        }
+        if let inlineMessageId = inlineMessageId {
+            message["inline_message_id"] = JSON(Node(inlineMessageId))
+        }
+        if let replyMarkup = replyMarkup {
+            message["reply_markup"] = try replyMarkup.makeJSON()
+        }
+
+        let response = try drop.client.post(baseUrl("editMessageReplyMarkup"), headers: jsonContentTypeHeader, body: message.makeBody())
+
+        return response
+    }
+
     class func getFile(fileId: String) throws -> Response {
         let request = try JSON(node: ["file_id": fileId])
 
