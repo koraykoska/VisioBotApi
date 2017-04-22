@@ -7,7 +7,7 @@
 //
 
 import Vapor
-import Foundation
+import RandomKit
 
 class AnalyzeCommand: BaseCommand {
 
@@ -65,7 +65,8 @@ class AnalyzeCommand: BaseCommand {
         ]
         for label in labels {
             if let l = label.object?["description"]?.string {
-                let text = "\(texts[Int(arc4random_uniform(UInt32(texts.count)))]) *\(l)*"
+                let number = Int.random(within: 0 ..< texts.count, using: &Xoroshiro.default)!
+                let text = "\(texts[number]) *\(l)*"
                 let replyMessageId = message["reply_to_message"]?["message_id"]?.int
                 let _ = try TelegramApi.sendMessage(chatId: String(chatId), text: text, parseMode: .markdown, replyToMessageId: replyMessageId)
             }
