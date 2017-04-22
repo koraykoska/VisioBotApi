@@ -12,7 +12,7 @@ protocol BaseCommand {
 
     static var command: String { get }
 
-    static func isParsable(json: JSON) -> Bool
+    static func isParsable(message: JSON) -> Bool
 
     var message: JSON { get }
 
@@ -23,8 +23,8 @@ protocol BaseCommand {
 
 extension BaseCommand {
 
-    static func isParsable(json: JSON) -> Bool {
-        guard let text = json["text"]?.string else {
+    static func isParsable(message: JSON) -> Bool {
+        guard let text = message["text"]?.string else {
             return false
         }
         return text == command || text == "\(command)\(ConfigHolder.botName)"

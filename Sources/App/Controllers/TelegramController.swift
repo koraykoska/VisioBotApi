@@ -14,7 +14,7 @@ final class TelegramController {
 
         // Parse request
         if let message = json["message"] {
-            parseMessage(message)
+            try parseMessage(message)
         }
 
         return try JSON(node: [
@@ -22,12 +22,18 @@ final class TelegramController {
             ])
     }
 
-    fileprivate func parseMessage(_ message: JSON) {
-        switch message["text"] {
-        case nil:
-            print("Not a text")
-        default:
-            drop.log.info("Can't answer that message...")
+    fileprivate func parseMessage(_ message: JSON) throws {
+        let commands: [BaseCommand.Type] = [StartCommand.self, AnalyzeCommand.self]
+
+        var correctCommands: [BaseCommand] = []
+        for command in commands {
+            if command.isParsable(message: message) {
+                correctCommands.append(command.init(message: message))
+            }
+        }
+
+        for command in correctCommands {
+            try command.run()
         }
     }
 }

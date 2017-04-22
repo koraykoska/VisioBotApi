@@ -11,4 +11,6 @@ class ConfigHolder {
     static var telegramToken: String!
 
     static var botName: String!
+
+    static var googleApiKey: String!
 }

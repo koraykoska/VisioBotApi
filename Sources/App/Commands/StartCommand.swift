@@ -33,8 +33,8 @@ class StartCommand: BaseCommand {
             chatName = chatFirstName
         }
 
-        let text = "Hi \(chatName)! You are now officially part of the NSA espionage network. Please feel free and reply to a voice message with the command /convertspeech so we can analyze it to make America secure again!"
+        let text = "Hi \(chatName)! You are now officially part of the NSA espionage network. Please feel free and reply to a photo with the command /analyze so we can analyze it to make America secure again!"
 
-        try TelegramApi.sendMessage(chatId: String(chatId), text: text)
+        let _ = try TelegramApi.sendMessage(chatId: String(chatId), text: text)
     }
 }
