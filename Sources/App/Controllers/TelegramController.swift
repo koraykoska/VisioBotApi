@@ -18,7 +18,8 @@ final class TelegramController {
         }
 
         if let callbackQuery = json["callback_query"] {
-            drop.log.error(try callbackQuery.serialize().string())
+            drop.log.debug("*** callback_query ***")
+            drop.log.debug(try callbackQuery.serialize().string())
             try parseCallbackQuery(callbackQuery)
         }
 

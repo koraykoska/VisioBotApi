@@ -38,13 +38,13 @@ class PhotoCommand: BaseCommand {
         guard let chatId = chat?["id"]?.int, let messageId = message["message_id"]?.int else {
             return
         }
-        guard let photos = message["photo"]?.array, let lastPhoto = photos[photos.count - 1].object, let photoId = lastPhoto["file_id"]?.string else {
+        guard PhotoCommand.isParsable(message: message) else {
             return
         }
 
         var buttonRows: [[InlineKeyboardButton]] = []
 
-        let analyzeButton = InlineKeyboardButton(text: "Analyze!", callbackData: "\(messageId):::\(photoId)")
+        let analyzeButton = InlineKeyboardButton(text: "Analyze!", callbackData: AnalyzeInlineCallbackQuery.callbackData)
         buttonRows.append([analyzeButton])
 
         let inlineKeyboard = InlineKeyboardMarkup(inlineKeyboardButtonRows: buttonRows)
