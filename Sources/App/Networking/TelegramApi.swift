@@ -34,7 +34,9 @@ class TelegramApi {
         if let replyToMessageId = replyToMessageId {
             message["reply_to_message_id"] = JSON(Node(replyToMessageId))
         }
-        // TODO: ReplyMarkup must be implemented
+        if let replyMarkup = replyMarkup {
+            message["reply_markup"] = try replyMarkup.makeJSON()
+        }
 
         drop.log.debug(baseUrl("sendMessage"))
 

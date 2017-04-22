@@ -10,7 +10,7 @@ import Vapor
 
 class StartCommand: BaseCommand {
 
-    static let command: String = "/start"
+    static let command: String? = "/start"
 
     let message: JSON
 

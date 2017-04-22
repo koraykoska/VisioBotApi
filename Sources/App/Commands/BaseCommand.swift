@@ -10,7 +10,7 @@ import Vapor
 
 protocol BaseCommand {
 
-    static var command: String { get }
+    static var command: String? { get }
 
     static func isParsable(message: JSON) -> Bool
 
@@ -24,6 +24,9 @@ protocol BaseCommand {
 extension BaseCommand {
 
     static func isParsable(message: JSON) -> Bool {
+        guard let command = command else {
+            return false
+        }
         guard let text = message["text"]?.string else {
             return false
         }

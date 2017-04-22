@@ -11,7 +11,7 @@ import RandomKit
 
 class AnalyzeCommand: BaseCommand {
 
-    static let command: String = "/analyze"
+    static let command: String? = "/analyze"
 
     let message: JSON
 

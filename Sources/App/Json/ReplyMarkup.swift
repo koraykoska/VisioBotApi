@@ -6,7 +6,9 @@
 //
 //
 
-protocol ReplyMarkup {
+import Vapor
+
+protocol ReplyMarkup: JSONRepresentable {
 
     // To be implemented
 }

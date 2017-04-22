@@ -23,7 +23,7 @@ final class TelegramController {
     }
 
     fileprivate func parseMessage(_ message: JSON) throws {
-        let commands: [BaseCommand.Type] = [StartCommand.self, AnalyzeCommand.self]
+        let commands: [BaseCommand.Type] = [StartCommand.self, AnalyzeCommand.self, PhotoCommand.self]
 
         var correctCommands: [BaseCommand] = []
         for command in commands {
