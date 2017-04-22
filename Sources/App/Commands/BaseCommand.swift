@@ -27,6 +27,6 @@ extension BaseCommand {
         guard let text = message["text"]?.string else {
             return false
         }
-        return text == command || text == "\(command)\(ConfigHolder.botName)"
+        return text == command || text == "\(command)\(ConfigHolder.botName ?? "")"
     }
 }
