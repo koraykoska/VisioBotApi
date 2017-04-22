@@ -1,5 +1,5 @@
 //
-//  PhotoCommand.swift
+//  AnalyzeInlineCommand.swift
 //  VisioBotApi
 //
 //  Created by Koray Koska on 22/04/2017.
@@ -8,7 +8,7 @@
 
 import Vapor
 
-class PhotoCommand: BaseCommand {
+class AnalyzeInlineCommand: BaseCommand {
 
     static let command: String? = nil
 
@@ -44,7 +44,7 @@ class PhotoCommand: BaseCommand {
 
         var buttonRows: [[InlineKeyboardButton]] = []
 
-        let analyzeButton = InlineKeyboardButton(text: "Analyze!", callbackData: "\(messageId):::\(photoId)")
+        let analyzeButton = InlineKeyboardButton(text: "Analyze!", callbackData: AnalyzeInlineCallbackQuery.callbackData)
         buttonRows.append([analyzeButton])
 
         let inlineKeyboard = InlineKeyboardMarkup(inlineKeyboardButtonRows: buttonRows)

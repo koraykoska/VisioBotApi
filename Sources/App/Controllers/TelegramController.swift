@@ -17,6 +17,10 @@ final class TelegramController {
             try parseMessage(message)
         }
 
+        if let callbackQuery = json["callback_query"] {
+            try parseCallbackQuery(callbackQuery)
+        }
+
         return try JSON(node: [
             "success": true
             ])
@@ -34,6 +38,21 @@ final class TelegramController {
 
         for command in correctCommands {
             try command.run()
+        }
+    }
+
+    fileprivate func parseCallbackQuery(_ callbackQuery: JSON) throws {
+        let callbackQueries: [BaseCallbackQuery.Type] = [AnalyzeInlineCallbackQuery.self]
+
+        var correctCallbackQueries: [BaseCallbackQuery] = []
+        for query in callbackQueries {
+            if query.isParsable(callbackQuery: callbackQuery) {
+                correctCallbackQueries.append(query.init(callbackQuery: callbackQuery))
+            }
+        }
+
+        for query in correctCallbackQueries {
+            try query.run()
         }
     }
 }
