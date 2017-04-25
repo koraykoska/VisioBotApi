@@ -60,7 +60,7 @@ class AnalyzeCommand: BaseCommand {
 
         let texts = [
             "Oh I know, it's a",
-            "Do you thing that's a",
+            "Do you think that's a",
             "This kinda looks like a"
         ]
         for label in labels {
