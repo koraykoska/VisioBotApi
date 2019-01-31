@@ -177,8 +177,8 @@
         "repositoryURL": "https://github.com/Boilertalk/TelegramBot.swift.git",
         "state": {
           "branch": null,
-          "revision": "4b243d8a50094d73894f9bc521471be06c8dc088",
-          "version": "0.4.4"
+          "revision": "e57fa2fffc0e5bd2b774ae04601e81f724ca357a",
+          "version": "0.4.5"
         }
       },
       {
