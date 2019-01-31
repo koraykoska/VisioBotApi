@@ -15,5 +15,5 @@ public func routes(_ router: Router, _ customConfigService: CustomConfigService)
     telegramBot.messageUpdate = controller.getMessage
     telegramBot.callbackQueryUpdate = controller.getCallback
 
-    telegramBot.setupWebhook(path: "", routerFunction: router.telegramRegister)
+    telegramBot.setupWebhook(path: customConfigService.telegramToken, routerFunction: router.telegramRegister)
 }
