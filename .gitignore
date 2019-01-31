@@ -2,10 +2,5 @@ Packages
 .build
 xcuserdata
 *.xcodeproj
-Config/secrets
-
-# idea files
-.idea/
-
-# macOS specific
+DerivedData/
 .DS_Store
