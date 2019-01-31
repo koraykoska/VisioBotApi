@@ -45,9 +45,13 @@ class AnalyzeCommand: BaseCommand {
 
         let sendApi = TelegramSendApi(token: token)
 
-        sendApi.getFile(fileId: fileId).then { file in
+        print("shit")
+
+        let queue = DispatchQueue(label: "SnedApi")
+
+        sendApi.getFile(fileId: fileId).then(on: queue) { file in
             return ImageDownloader.downloadImage(url: "https://api.telegram.org/file/bot\(self.token)/\(file.filePath ?? "")")
-        }.then { imageData -> PromiseKit.Promise<GoogleVisionApiAnnotateResponse> in
+        }.then(on: queue) { imageData -> PromiseKit.Promise<GoogleVisionApiAnnotateResponse> in
             let imageRequest = GoogleVisionApiAnnotateRequest.ImageRequest(
                 image: .init(content: imageData.base64EncodedString()),
                 features: [
@@ -57,7 +61,7 @@ class AnalyzeCommand: BaseCommand {
             let visionRequest = GoogleVisionApiAnnotateRequest(requests: [imageRequest])
 
             return GoogleVisionApi(apiKey: self.apiKey).annotate(request: visionRequest)
-        }.done { visionResponse in
+        }.done(on: queue) { visionResponse in
             let responses = visionResponse.responses
             guard responses.count > 0, let labels = responses[0].labelAnnotations else {
                 // TODO: Something went wrong with the vision api request or we have no assumptions. Inform the user...
@@ -80,7 +84,7 @@ class AnalyzeCommand: BaseCommand {
 
                 sendApi.sendMessage(message: m)
             }
-        }.catch { err in
+        }.catch(on: queue) { err in
             print(err)
         }
     }

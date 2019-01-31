@@ -19,7 +19,7 @@ struct GoogleVisionApiAnnotateResponse: Codable {
 
             let mid: String
 
-            let locale: String
+            let locale: String?
 
             let description: String
 
