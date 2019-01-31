@@ -50,7 +50,7 @@ class PhotoCommand: BaseCommand {
 
         let inlineKeyboard = TelegramInlineKeyboardMarkup(inlineKeyboard: buttonRows)
 
-        let sendApi = TelegramSendApi(token: token)
+        let sendApi = TelegramSendApi(token: token, provider: SnakeTelegramProvider(token: token))
 
         let sendMessage = TelegramSendMessage(
             chatId: chatId,

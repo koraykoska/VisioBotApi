@@ -41,7 +41,7 @@ class StartCommand: BaseCommand {
 
         let text = "Hi \(chatName)! Welcome to Visio. Please feel free and reply to a photo with the command /analyze so we can analyze it and give you some assumptions for it!"
 
-        let sendApi = TelegramSendApi(token: token)
+        let sendApi = TelegramSendApi(token: token, provider: SnakeTelegramProvider(token: token))
 
         sendApi.sendMessage(message: TelegramSendMessage(chatId: chatId, text: text))
     }

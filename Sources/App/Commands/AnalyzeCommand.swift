@@ -43,7 +43,7 @@ class AnalyzeCommand: BaseCommand {
 
         let fileId = bestPhoto.fileId
 
-        let sendApi = TelegramSendApi(token: token)
+        let sendApi = TelegramSendApi(token: token, provider: SnakeTelegramProvider(token: token))
 
         print("shit")
 

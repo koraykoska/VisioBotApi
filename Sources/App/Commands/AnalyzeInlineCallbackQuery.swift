@@ -33,7 +33,7 @@ class AnalyzeInlineCallbackQuery: BaseCallbackQuery {
         let a = AnalyzeCommand(message: message, token: token, apiKey: apiKey)
         try a.run()
 
-        let sendApi = TelegramSendApi(token: token)
+        let sendApi = TelegramSendApi(token: token, provider: SnakeTelegramProvider(token: token))
 
         let answer = TelegramSendAnswerCallbackQuery(callbackQueryId: id)
 
