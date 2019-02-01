@@ -6,30 +6,49 @@
 //
 
 import Foundation
-import JavaScriptCore
 
 class SnakeCaser {
 
-    static func snakeCase(json: String) -> String? {
-        let context = JSContext()
+    /// Call this only on background threads
+    static func snakeCase(json: String, callback: @escaping (String?) -> ()) {
+        let urlStr = "http://127.0.0.1:8888/snakeCase"
 
-        let path = "Resources/snake_case.js"
-        let url = URL(fileURLWithPath: path)
-        guard let data = try? Data(contentsOf: url) else {
-            return nil
+        guard let body = json.data(using: .utf8) else {
+            callback(nil)
+            return
         }
 
-        let js = String(data: data, encoding: .utf8)
-
-        context?.evaluateScript(js)
-
-        let testFunction = context?.objectForKeyedSubscript("sn")
-        let result = testFunction?.call(withArguments: [json])
-
-        guard result?.isString ?? false else {
-            return nil
+        guard let url = URL(string: urlStr) else {
+            callback(nil)
+            return
         }
 
-        return result?.toString()
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.httpBody = body
+        req.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let session = URLSession(configuration: .default)
+
+        let queue = DispatchQueue(label: "AppSnakeCaser")
+
+        queue.async {
+            let task = session.dataTask(with: req) { data, urlResponse, error in
+                guard let urlResponse = urlResponse as? HTTPURLResponse, let data = data, error == nil else {
+                    callback(nil)
+                    return
+                }
+
+                let status = urlResponse.statusCode
+                guard status >= 200 && status < 300 else {
+                    callback(nil)
+                    return
+                }
+
+                let snaked = String(data: data, encoding: .utf8)
+                callback(snaked)
+            }
+            task.resume()
+        }
     }
 }

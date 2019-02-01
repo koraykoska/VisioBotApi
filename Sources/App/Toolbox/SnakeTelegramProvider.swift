@@ -61,48 +61,50 @@ struct SnakeTelegramProvider: TelegramApiProvider {
             req.httpMethod = "POST"
 
             // Snakify
-            var snakeBody: String? = nil
-            if let camelBody = String(data: body, encoding: .utf8) {
-                snakeBody = SnakeCaser.snakeCase(json: camelBody)
-            }
-            guard let sBody = snakeBody?.data(using: .utf8) else {
+            guard let camelBody = String(data: body, encoding: .utf8) else {
                 response(TelegramResponse<Result>(error: .requestFailed(nil)))
                 return
             }
-
-            req.httpBody = sBody
-            for (k, v) in type(of: self).headers {
-                req.addValue(v, forHTTPHeaderField: k)
-            }
-
-            let task = self.session.dataTask(with: req) { data, urlResponse, error in
-                guard let urlResponse = urlResponse as? HTTPURLResponse, let data = data, error == nil else {
-                    let err = TelegramResponse<Result>(error: .serverError(error))
-                    response(err)
+            SnakeCaser.snakeCase(json: camelBody) { snaked in
+                guard let sBody = snaked?.data(using: .utf8) else {
+                    response(TelegramResponse<Result>(error: .requestFailed(nil)))
                     return
                 }
 
-                let status = urlResponse.statusCode
-                guard status >= 200 && status < 300 else {
-                    // This is a non typical error response and should be considered a server error.
-                    let err = TelegramResponse<Result>(error: .serverError(nil))
-                    response(err)
-                    return
+                req.httpBody = sBody
+                for (k, v) in type(of: self).headers {
+                    req.addValue(v, forHTTPHeaderField: k)
                 }
-                print(body.base64EncodedString())
 
-                do {
-                    let decoded = try self.decoder.decode(TelegramApiResponse<Result>.self, from: data)
-                    // We got the Result object
-                    let res = TelegramResponse(response: decoded)
-                    response(res)
-                } catch {
-                    // We don't have the response we expected...
-                    let err = TelegramResponse<Result>(error: .decodingError(error))
-                    response(err)
+                let task = self.session.dataTask(with: req) { data, urlResponse, error in
+                    guard let urlResponse = urlResponse as? HTTPURLResponse, let data = data, error == nil else {
+                        let err = TelegramResponse<Result>(error: .serverError(error))
+                        response(err)
+                        return
+                    }
+
+                    let status = urlResponse.statusCode
+                    guard status >= 200 && status < 300 else {
+                        // This is a non typical error response and should be considered a server error.
+                        let err = TelegramResponse<Result>(error: .serverError(nil))
+                        response(err)
+                        return
+                    }
+                    print(body.base64EncodedString())
+
+                    do {
+                        let decoded = try self.decoder.decode(TelegramApiResponse<Result>.self, from: data)
+                        // We got the Result object
+                        let res = TelegramResponse(response: decoded)
+                        response(res)
+                    } catch {
+                        // We don't have the response we expected...
+                        let err = TelegramResponse<Result>(error: .decodingError(error))
+                        response(err)
+                    }
                 }
+                task.resume()
             }
-            task.resume()
         }
     }
 }
