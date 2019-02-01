@@ -73,17 +73,21 @@ class AnalyzeCommand: BaseCommand {
                 "Do you think that's a",
                 "This kinda looks like a"
             ]
+            var messages: [String] = []
             for label in labels {
                 let l = label.description
 
                 let number = Int.random(in: 0 ..< texts.count)
                 let text = "\(texts[number]) *\(l)*"
-                let replyMessageId = self.message.replyToMessage?.messageId
 
-                let m = TelegramSendMessage(chatId: chatId, text: text, parseMode: .markdown, replyToMessageId: replyMessageId)
-
-                sendApi.sendMessage(message: m)
+                messages.append("\(text) (\(label.score))")
             }
+
+            let finalMessage = messages.joined(separator: "    \n")
+            let replyMessageId = self.message.replyToMessage?.messageId
+            let m = TelegramSendMessage(chatId: chatId, text: finalMessage, parseMode: .markdown, replyToMessageId: replyMessageId)
+
+            sendApi.sendMessage(message: m)
         }.catch(on: queue) { err in
             print(err)
         }
