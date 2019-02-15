@@ -17,7 +17,7 @@ class AnalyzeCommand: BaseCommand {
         case imageDownloadFailed
     }
 
-    static let command: String = "/analyze"
+    static let command: String = "#analyze"
 
     let message: TelegramMessage
 
@@ -36,7 +36,7 @@ class AnalyzeCommand: BaseCommand {
         let chatId = chat.id
 
         guard let photos = message.replyToMessage?.photo else {
-            // TODO: Send message with expenation how to use the /analyze command
+            // TODO: Send message with expenation how to use the #analyze command
             return
         }
         let bestPhoto = photos[photos.count - 1]
@@ -44,8 +44,6 @@ class AnalyzeCommand: BaseCommand {
         let fileId = bestPhoto.fileId
 
         let sendApi = TelegramSendApi(token: token, provider: SnakeTelegramProvider(token: token))
-
-        print("shit")
 
         let queue = DispatchQueue(label: "SnedApi")
 
