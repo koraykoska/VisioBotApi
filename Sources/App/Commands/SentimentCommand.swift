@@ -35,17 +35,21 @@ class SentimentCommand: BaseCommand {
         let chat = message.chat
         let chatId = chat.id
 
-        guard let photos = message.replyToMessage?.photo else {
+        let fileId: String
+        if let photos = message.replyToMessage?.photo {
+            let bestPhoto = photos[photos.count - 1]
+
+            fileId = bestPhoto.fileId
+        } else if let sticker = message.replyToMessage?.sticker {
+            fileId = sticker.fileId
+        } else {
             // TODO: Send message with expenation how to use the #sentiment command
             return
         }
-        let bestPhoto = photos[photos.count - 1]
-
-        let fileId = bestPhoto.fileId
 
         let sendApi = TelegramSendApi(token: token, provider: SnakeTelegramProvider(token: token))
 
-        let queue = DispatchQueue(label: "SnedApi")
+        let queue = DispatchQueue(label: "SentimentCommand")
 
         sendApi.getFile(fileId: fileId).then(on: queue) { file in
             return ImageDownloader.downloadImage(url: "https://api.telegram.org/file/bot\(self.token)/\(file.filePath ?? "")")

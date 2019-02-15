@@ -35,13 +35,17 @@ class AnalyzeCommand: BaseCommand {
         let chat = message.chat
         let chatId = chat.id
 
-        guard let photos = message.replyToMessage?.photo else {
+        let fileId: String
+        if let photos = message.replyToMessage?.photo {
+            let bestPhoto = photos[photos.count - 1]
+
+            fileId = bestPhoto.fileId
+        } else if let sticker = message.replyToMessage?.sticker {
+            fileId = sticker.fileId
+        } else {
             // TODO: Send message with expenation how to use the #analyze command
             return
         }
-        let bestPhoto = photos[photos.count - 1]
-
-        let fileId = bestPhoto.fileId
 
         let sendApi = TelegramSendApi(token: token, provider: SnakeTelegramProvider(token: token))
 
